@@ -59,17 +59,6 @@ def check_url_source(source_type, yt_url:str=None, wiki_query:str=None):
       logging.error(f"Error in recognize URL: {e}")
       raise Exception(e)
 
-def get_combined_chunks(chunkId_chunkDoc_list):
-    chunks_to_combine = int(os.environ.get('NUMBER_OF_CHUNKS_TO_COMBINE'))
-    logging.info(f"Combining {chunks_to_combine} chunks before sending request to LLM")
-    combined_chunk_document_list=[]
-    combined_chunks_page_content = ["".join(document['chunk_doc'].page_content for document in chunkId_chunkDoc_list[i:i+chunks_to_combine]) for i in range(0, len(chunkId_chunkDoc_list),chunks_to_combine)]
-    combined_chunks_ids = [[document['chunk_id'] for document in chunkId_chunkDoc_list[i:i+chunks_to_combine]] for i in range(0, len(chunkId_chunkDoc_list),chunks_to_combine)]
-    
-    for i in range(len(combined_chunks_page_content)):
-         combined_chunk_document_list.append(Document(page_content=combined_chunks_page_content[i], metadata={"combined_chunk_ids":combined_chunks_ids[i]}))
-    return combined_chunk_document_list
-
 
 def get_chunk_and_graphDocument(graph_document_list, chunkId_chunkDoc_list):
   logging.info("creating list of chunks and graph documents in get_chunk_and_graphDocument func")
@@ -132,82 +121,14 @@ def delete_uploaded_local_file(merged_file_path, file_name):
 def close_db_connection(graph, api_name):
   if not graph._driver._closed:
       logging.info(f"closing connection for {api_name} api")
-      # graph._driver.close()   
-      
-def get_llm(model_version:str) :
-    """Retrieve the specified language model based on the model name."""
-    if "gemini" in model_version:
-        llm = ChatVertexAI(
-            model_name=model_version,
-            convert_system_message_to_human=True,
-            temperature=0,
-            safety_settings={
-                HarmCategory.HARM_CATEGORY_UNSPECIFIED: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
-                HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_NONE
-            }
-        )
-    elif "gpt" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('OPENAI_API_KEY'),
-                         temperature=0.9)
+      # graph._driver.close()
 
-    elif "glm" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('ZHIPUAI_API_KEY'),
-                         base_url=os.environ.get('ZHIPUAI_API_URL'),
-                         model=model_version,
-                         # top_p=0.7,
-                         temperature=0.98)
-    elif "moonshot" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('MOONSHOT_API_KEY'),
-                         base_url=os.environ.get('MOONSHOT_API_URL'),
-                         model=model_version,
-                         top_p=0.7,
-                         temperature=0.95)
-    elif "Baichuan" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('BAICHUAN_API_KEY'),
-                         base_url=os.environ.get('BAICHUAN_API_URL'),
-                         model=model_version,
-                         # top_p=0.7,
-                         temperature=0.95)
-    elif "yi-large" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('LINGYIWANWU_API_KEY'),
-                         base_url=os.environ.get('LINGYIWANWU_API_URL'),
-                         model=model_version,
-                         top_p=0.7,
-                         temperature=0.95)
-    elif "deepseek" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('DEEPSEEK_API_KEY'),
-                         base_url=os.environ.get('DEEPSEEK_API_URL'),
-                         model=model_version,
-                         top_p=0.7,
-                         temperature=0.95)
-    elif "qwen" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('QWEN_API_KEY'),
-                         base_url=os.environ.get('QWEN_API_URL'),
-                         model=model_version,
-                         top_p=0.7,
-                         temperature=0.95)
-    elif "Doubao" in model_version:
-        llm = ChatOpenAI(api_key=os.environ.get('DOUBAO_API_KEY'),
-                         base_url=os.environ.get('DOUBAO_API_URL'),
-                         model=os.environ.get('ENDPOINT_ID'),
-                         # top_p=0.7,
-                         # temperature=0.95
-                         )
-
-    elif "llama3" in model_version:
-        llm = ChatGroq(api_key=os.environ.get('GROQ_API_KEY'),
-                       temperature=0,
-                       model_name=model_version)
-    else:
-        llm = DiffbotGraphTransformer(diffbot_api_key=os.environ.get('DIFFBOT_API_KEY'),extract_types=['entities','facts'])    
-    logging.info(f"Model created - Model Version: {model_version}")
-    return llm
-  
 def create_gcs_bucket_folder_name_hashed(uri, file_name):
   folder_name = uri + file_name
   folder_name_sha1 = hashlib.sha1(folder_name.encode())
   folder_name_sha1_hashed = folder_name_sha1.hexdigest()
   return folder_name_sha1_hashed
+
+def formatted_time(current_time):
+  formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S %Z')
+  return formatted_time
