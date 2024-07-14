@@ -8,13 +8,16 @@ from langchain_google_vertexai import HarmBlockThreshold, HarmCategory
 from langchain_experimental.graph_transformers.diffbot import DiffbotGraphTransformer
 import concurrent.futures
 from concurrent.futures import ThreadPoolExecutor
-from langchain_experimental.graph_transformers import LLMGraphTransformer
+# from langchain_experimental.graph_transformers import LLMGraphTransformer
 from langchain_anthropic import ChatAnthropic
 from langchain_fireworks import ChatFireworks
 from langchain_aws import ChatBedrock
 from langchain_community.chat_models import ChatOllama
+from langchain_community.chat_models.tongyi import ChatTongyi
 import boto3
 import google.auth
+
+from src.graph_transformers.llm import LLMGraphTransformer
 from src.shared.constants import MODEL_VERSIONS
 
 
@@ -23,7 +26,51 @@ def get_llm(model_version: str):
     env_key = "LLM_MODEL_CONFIG_" + model_version
     env_value = os.environ.get(env_key)
     logging.info("Model: {}".format(env_key))
-    if "gemini" in model_version:
+    model_name = MODEL_VERSIONS[model_version]
+    if "glm" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('ZHIPUAI_API_KEY'),
+                         base_url=os.environ.get('ZHIPUAI_API_URL'),
+                         model=model_name,
+                         # top_p=0.7,
+                         temperature=0.98)
+    elif "moonshot" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('MOONSHOT_API_KEY'),
+                         base_url=os.environ.get('MOONSHOT_API_URL'),
+                         model=model_name,
+                         top_p=0.7,
+                         temperature=0.95)
+    elif "Baichuan" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('BAICHUAN_API_KEY'),
+                         base_url=os.environ.get('BAICHUAN_API_URL'),
+                         model=model_name,
+                         # top_p=0.7,
+                         temperature=0.95)
+    elif "yi-large" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('LINGYIWANWU_API_KEY'),
+                         base_url=os.environ.get('LINGYIWANWU_API_URL'),
+                         model=model_name,
+                         top_p=0.7,
+                         temperature=0.95)
+    elif "deepseek" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('DEEPSEEK_API_KEY'),
+                         base_url=os.environ.get('DEEPSEEK_API_URL'),
+                         model=model_name,
+                         top_p=0.7,
+                         temperature=0.95)
+    elif "qwen" in MODEL_VERSIONS[model_version]:
+        llm = ChatTongyi(api_key=os.environ.get('QWEN_API_KEY'),
+                         base_url=os.environ.get('QWEN_API_URL'),
+                         model=model_name,
+                         top_p=0.7,
+                         temperature=0.95)
+    elif "Doubao" in MODEL_VERSIONS[model_version]:
+        llm = ChatOpenAI(api_key=os.environ.get('DOUBAO_API_KEY'),
+                         base_url=os.environ.get('DOUBAO_API_URL'),
+                         model=os.environ.get('ENDPOINT_ID'),
+                         # top_p=0.7,
+                         # temperature=0.95
+                         )
+    elif "gemini" in model_version:
         credentials, project_id = google.auth.default()
         model_name = MODEL_VERSIONS[model_version]
         llm = ChatVertexAI(
@@ -108,14 +155,14 @@ def get_combined_chunks(chunkId_chunkDoc_list):
     combined_chunks_page_content = [
         "".join(
             document["chunk_doc"].page_content
-            for document in chunkId_chunkDoc_list[i : i + chunks_to_combine]
+            for document in chunkId_chunkDoc_list[i: i + chunks_to_combine]
         )
         for i in range(0, len(chunkId_chunkDoc_list), chunks_to_combine)
     ]
     combined_chunks_ids = [
         [
             document["chunk_id"]
-            for document in chunkId_chunkDoc_list[i : i + chunks_to_combine]
+            for document in chunkId_chunkDoc_list[i: i + chunks_to_combine]
         ]
         for i in range(0, len(chunkId_chunkDoc_list), chunks_to_combine)
     ]
@@ -131,7 +178,7 @@ def get_combined_chunks(chunkId_chunkDoc_list):
 
 
 def get_graph_document_list(
-    llm, combined_chunk_document_list, allowedNodes, allowedRelationship
+        llm, combined_chunk_document_list, allowedNodes, allowedRelationship
 ):
     futures = []
     graph_document_list = []
