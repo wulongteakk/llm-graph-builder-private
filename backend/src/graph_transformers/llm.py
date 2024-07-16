@@ -551,11 +551,12 @@ class LLMGraphTransformer:
         prompt: Optional[ChatPromptTemplate] = None,
         strict_mode: bool = True,
         node_properties: Union[bool, List[str]] = False,
+        use_function_call: bool = True
     ) -> None:
         self.allowed_nodes = allowed_nodes
         self.allowed_relationships = allowed_relationships
         self.strict_mode = strict_mode
-        self._function_call = True
+        self._function_call = use_function_call
         # Check if the LLM really supports structured output
         try:
             llm.with_structured_output(_Graph)

@@ -58,11 +58,9 @@ def get_llm(model_version: str):
                          top_p=0.7,
                          temperature=0.95)
     elif "qwen" in MODEL_VERSIONS[model_version]:
-        llm = ChatTongyi(api_key=os.environ.get('QWEN_API_KEY'),
-                         base_url=os.environ.get('QWEN_API_URL'),
-                         model=model_name,
-                         top_p=0.7,
-                         temperature=0.95)
+        llm = ChatTongyi(
+            model=model_name
+        )
     elif "Doubao" in MODEL_VERSIONS[model_version]:
         llm = ChatOpenAI(api_key=os.environ.get('DOUBAO_API_KEY'),
                          base_url=os.environ.get('DOUBAO_API_URL'),
@@ -178,11 +176,11 @@ def get_combined_chunks(chunkId_chunkDoc_list):
 
 
 def get_graph_document_list(
-        llm, combined_chunk_document_list, allowedNodes, allowedRelationship
+        llm, combined_chunk_document_list, allowedNodes, allowedRelationship, use_function=True
 ):
     futures = []
     graph_document_list = []
-    if llm.get_name() == "ChatOllama":
+    if not use_function:
         node_properties = False
     else:
         node_properties = ["description"]
@@ -191,6 +189,7 @@ def get_graph_document_list(
         node_properties=node_properties,
         allowed_nodes=allowedNodes,
         allowed_relationships=allowedRelationship,
+        use_function_call=use_function
     )
     with ThreadPoolExecutor(max_workers=10) as executor:
         for chunk in combined_chunk_document_list:
