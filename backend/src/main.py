@@ -25,6 +25,8 @@ import shutil
 import urllib.parse
 import json
 
+
+
 warnings.filterwarnings("ignore")
 load_dotenv()
 logging.basicConfig(format='%(asctime)s - %(message)s',level='INFO')
@@ -371,7 +373,7 @@ def processing_chunks(chunkId_chunkDoc_list,graph,file_name,model,allowedNodes,a
   chunks_and_graphDocuments_list = get_chunk_and_graphDocument(graph_documents, chunkId_chunkDoc_list)
   merge_relationship_between_chunk_and_entites(graph, chunks_and_graphDocuments_list)
   # return graph_documents
-  
+
   distinct_nodes = set()
   relations = []
   for graph_document in graph_documents:

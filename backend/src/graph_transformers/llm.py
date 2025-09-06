@@ -6,7 +6,10 @@
 # @Affiliation: tfswufe.edu.cn
 
 import asyncio
+import logging
 import json
+
+from json.decoder import JSONDecodeError
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Type, Union, cast
 
 from langchain_community.graphs.graph_document import GraphDocument, Node, Relationship
@@ -129,6 +132,39 @@ default_prompt = ChatPromptTemplate.from_messages(
 )
 
 
+def get_dynamic_prompt_template(allowed_nodes: List[str], allowed_relationships: List[str]) -> str:
+    """
+    根据是否提供了节点和关系类型，生成不同的系统提示。
+    """
+    # 当用户在前端定义了节点和关系时的提示 (保持原始的严格指令)
+    prompt_with_schema = (
+        "You are a top-tier algorithm designed for extracting information in structured "
+        "formats to build a knowledge graph. Your task is to identify entities and "
+        "relationships from a given text. You must strictly follow the provided schema "
+        "for node labels and relationship types. Do not infer any node labels or "
+        "relationship types that are not explicitly provided in the schema.\n"
+        "---------------------\n"
+        "Schema:\n"
+        f"Node Labels: {allowed_nodes}\n"
+        f"Relationship Types: {allowed_relationships}\n"
+        "---------------------\n"
+    )
+    # 当用户没有定义任何节点和关系时的提示 (给予模型更大的自由度)
+    prompt_without_schema = (
+        "You are a top-tier algorithm designed for extracting information in structured "
+        "formats to build a knowledge graph. Your task is to identify the main entities and "
+        "their relationships from a given text. First, analyze the text to determine the "
+        "most relevant and logical schema (node labels and relationship types) for the "
+        "information presented. Then, extract the entities and relationships based on "
+        "the schema you have inferred. Focus on the core subjects, their defining "
+        "attributes, and how they connect to one another."
+    )
+
+    # 如果用户提供了任何节点或关系类型，则使用严格的模板；否则，使用灵活的模板。
+    if allowed_nodes or allowed_relationships:
+        return prompt_with_schema
+    else:
+        return prompt_without_schema
 def _get_additional_info(input_type: str) -> str:
     # Check if the input_type is one of the allowed values
     if input_type not in ["node", "relationship", "property"]:
@@ -542,7 +578,6 @@ class LLMGraphTransformer:
             doc = Document(page_content="Elon Musk is suing OpenAI")
             graph_documents = transformer.convert_to_graph_documents([doc])
     """
-
     def __init__(
         self,
         llm: BaseLanguageModel,
@@ -591,34 +626,179 @@ class LLMGraphTransformer:
             prompt = prompt or default_prompt
             self.chain = prompt | structured_llm
 
+    def _fix_incomplete_json(self, json_str: str) -> str:
+        """
+        尝试修复不完整的JSON字符串，处理常见的LLM输出问题
+        """
+        # 去除代码块标记
+        json_str = json_str.replace("```json", "").replace("```", "").strip()
+        # 步骤1: 尝试修复单引号问题
+        if json_str.count("'") > json_str.count('"'):
+            logging.info("检测到更多单引号，尝试转换为双引号")
+            json_str = json_str.replace("'", '"')
+
+        # 步骤2: 处理未完成的字符串
+        # 寻找未闭合的字符串
+        in_string = False
+        escaped = False
+        last_quote_pos = -1
+        for i, char in enumerate(json_str):
+            if escaped:
+                escaped = False
+                continue
+            if char == '\\':
+                escaped = True
+            elif char == '"':
+                in_string = not in_string
+                last_quote_pos = i if in_string else last_quote_pos
+
+        # 如果字符串未闭合，添加闭合引号
+        if in_string:
+            # 找到未闭合引号后，继续查找字母/数字/_的最后一位
+            end_pos = last_quote_pos + 1
+            while end_pos < len(json_str) and (json_str[end_pos].isalnum() or json_str[end_pos] == '_'):
+                end_pos += 1
+            # 更新 last_quote_pos 为字母/数字/_的最后一位
+            last_quote_pos = end_pos - 1
+
+            logging.info(f"发现未闭合的字符串，在位置{last_quote_pos}后添加引号")
+            json_str = json_str[:last_quote_pos + 1] + '"' + json_str[last_quote_pos + 1:]
+
+        # 步骤3: 处理未完成的数组或对象
+        # 计算括号平衡
+        open_brackets = 0
+        open_braces = 0
+        in_string = False
+        escaped = False
+
+        for char in json_str:
+            if escaped:
+                escaped = False
+                continue
+            if char == '\\':
+                escaped = True
+            elif char == '"':
+                in_string = not in_string
+            elif not in_string:
+                if char == '[':
+                    open_brackets += 1
+                elif char == ']':
+                    open_brackets -= 1
+                elif char == '{':
+                    open_braces += 1
+                elif char == '}':
+                    open_braces -= 1
+
+        # 添加缺失的闭合括号
+        if open_braces > 0:
+            logging.info(f"添加{open_braces}个'}}'以闭合对象")
+            json_str += '}' * open_braces
+        if open_brackets > 0:
+            logging.info(f"添加{open_brackets}个']'以闭合数组")
+            json_str += ']' * open_brackets
+
+
+        # 步骤4: 尝试修复不完整的最后一个对象
+        # 寻找最后一个未闭合的对象
+        last_open_brace = json_str.rfind('{')
+        last_close_brace = json_str.rfind('}')
+
+        if last_open_brace > last_close_brace:
+            logging.info("发现未闭合的最后一个对象，尝试闭合")
+            # 寻找最后一个键值对的结束
+            last_colon = json_str.rfind(':', last_open_brace)
+            if last_colon > -1:
+                # 尝试找到值的结束
+                last_value_char = max(
+                    json_str.rfind(',', last_colon),
+                    json_str.rfind(']', last_colon),
+                    json_str.rfind('}', last_colon)
+                )
+                if last_value_char == -1:
+                    # 没有找到值的结束，可能是不完整的值
+                    logging.info("添加缺失的值和闭合括号")
+                    json_str = json_str[:last_colon + 1] + ' "unknown"}'
+                else:
+                    # 闭合对象
+                    logging.info("闭合不完整的对象")
+                    json_str = json_str[:last_value_char + 1] + '}'
+
+        return json_str
+
+
     def process_response(self, document: Document) -> GraphDocument:
         """
         Processes a single document, transforming it into a graph document using
         an LLM based on the model's schema and constraints.
         """
         text = document.page_content
+        # 假设 text 是 JSON 格式的字符串，需要先解析它
+
         raw_schema = self.chain.invoke({"input": text})
+        logging.info(f"LLM response: {raw_schema}")
         if self._function_call:
+
             raw_schema = cast(Dict[Any, Any], raw_schema)
             nodes, relationships = _convert_to_graph_document(raw_schema)
         else:
             nodes_set = set()
             relationships = []
-            parsed_json = self.json_repair.loads(raw_schema.content)
-            for rel in parsed_json:
-                # Nodes need to be deduplicated using a set
-                nodes_set.add((rel["head"], rel["head_type"]))
-                nodes_set.add((rel["tail"], rel["tail_type"]))
 
-                source_node = Node(id=rel["head"], type=rel["head_type"])
-                target_node = Node(id=rel["tail"], type=rel["tail_type"])
-                relationships.append(
-                    Relationship(
-                        source=source_node, target=target_node, type=rel["relation"]
+            try:
+                # 直接使用 raw_schema.content 解析 JSON
+                parsed_json = json.loads(raw_schema.content)
+            except json.JSONDecodeError as e:
+                # 尝试修复不完整的JSON
+                logging.error(f"原始JSON解析失败: {e}")
+                logging.info("尝试修复不完整的JSON...")
+
+
+
+
+                fixed_json_str = self._fix_incomplete_json(raw_schema.content)
+
+                try:
+                    parsed_json = json.loads(fixed_json_str)
+                    logging.warning(f"成功修复JSON: {fixed_json_str[:100]}...")
+                except Exception as e2:
+                    logging.error(f"JSON修复失败: {e2}")
+                    logging.error(f"原始LLM响应: {raw_schema.content}")
+                    logging.error(f"修复后的JSON尝试: {fixed_json_str}")
+                    return GraphDocument(nodes=[], relationships=[], source=document)
+
+            for rel in parsed_json:
+                # 确保所有必要字段都存在
+                if "head" in rel and "head_type" in rel and "tail" in rel and "tail_type" in rel and "relation" in rel:
+                    # 添加节点到集合中进行去重
+                    nodes_set.add((rel["head"], rel["head_type"]))
+                    nodes_set.add((rel["tail"], rel["tail_type"]))
+
+                    # 创建关系
+                    source_node = Node(id=rel["head"], type=rel["head_type"])
+                    target_node = Node(id=rel["tail"], type=rel["tail_type"])
+                    relationships.append(
+                        Relationship(
+                            source=source_node, target=target_node, type=rel["relation"]
+                        )
                     )
-                )
-            # Create nodes list
+                else:
+                    logging.warning(f"Skipping invalid relation: {rel}")
             nodes = [Node(id=el[0], type=el[1]) for el in list(nodes_set)]
+            ##
+            # for rel in parsed_json:
+            #     # Nodes need to be deduplicated using a set
+            #     nodes_set.add((rel["head"], rel["head_type"]))
+            #     nodes_set.add((rel["tail"], rel["tail_type"]))
+            #
+            #     source_node = Node(id=rel["head"], type=rel["head_type"])
+            #     target_node = Node(id=rel["tail"], type=rel["tail_type"])
+            #     relationships.append(
+            #         Relationship(
+            #             source=source_node, target=target_node, type=rel["relation"]
+            #         )
+            #     )
+            # Create nodes list
+            # nodes = [Node(id=el[0], type=el[1]) for el in list(nodes_set)]
 
         # Strict mode filtering
         if self.strict_mode and (self.allowed_nodes or self.allowed_relationships):

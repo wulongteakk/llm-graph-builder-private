@@ -33,7 +33,7 @@ from langchain_fireworks import ChatFireworks
 from langchain_aws import ChatBedrock
 from langchain_community.chat_models import ChatOllama
 
-load_dotenv() 
+load_dotenv()
 
 EMBEDDING_MODEL = os.getenv('EMBEDDING_MODEL')
 EMBEDDING_FUNCTION , _ = load_embedding_model(EMBEDDING_MODEL)
@@ -50,7 +50,7 @@ def get_neo4j_retriever(graph, retrieval_query,document_names,index_name="vector
         logging.info(f"Successfully retrieved Neo4jVector index '{index_name}'")
         document_names= list(map(str.strip, json.loads(document_names)))
         if document_names:
-            retriever = neo_db.as_retriever(search_kwargs={'k': search_k, "score_threshold": score_threshold,'filter':{'fileName': {'$in': document_names}}})
+            retriever = neo_db.as_retriever(search_kwargs={'k': search_k, "score_threshold": score_threshold,})
             logging.info(f"Successfully created retriever for index '{index_name}' with search_k={search_k}, score_threshold={score_threshold} for documents {document_names}")
         else:
             retriever = neo_db.as_retriever(search_kwargs={'k': search_k, "score_threshold": score_threshold})
@@ -58,8 +58,8 @@ def get_neo4j_retriever(graph, retrieval_query,document_names,index_name="vector
         return retriever
     except Exception as e:
         logging.error(f"Error retrieving Neo4jVector index '{index_name}' or creating retriever: {e}")
-        return None 
-    
+        return None
+
 def create_document_retriever_chain(llm,retriever):
     query_transform_prompt = ChatPromptTemplate.from_messages(
         [
@@ -105,7 +105,7 @@ def create_neo4j_chat_message_history(graph, session_id):
 
     except Exception as e:
         logging.error(f"Error creating Neo4jChatMessageHistory: {e}")
-    return None 
+    return None
 
 def format_documents(documents,model):
     prompt_token_cutoff = 4
@@ -144,7 +144,7 @@ def get_rag_chain(llm,system_template=CHAT_SYSTEM_TEMPLATE):
             ),
     ]
     )
-    question_answering_chain = question_answering_prompt | llm 
+    question_answering_chain = question_answering_prompt | llm
 
     return question_answering_chain
 
@@ -189,7 +189,7 @@ def summarize_messages(llm,history,stored_messages):
 
 
 def get_total_tokens(ai_response,llm):
-    
+
     if isinstance(llm,(ChatOpenAI,AzureChatOpenAI,ChatFireworks,ChatGroq)):
         total_tokens = ai_response.response_metadata['token_usage']['total_tokens']
     elif isinstance(llm,(ChatVertexAI)):
@@ -214,8 +214,8 @@ def clear_chat_history(graph,session_id):
         )
     history.clear()
     return {
-            "session_id": session_id, 
-            "message": "The chat History is cleared", 
+            "session_id": session_id,
+            "message": "The chat History is cleared",
             "user": "chatbot"
             }
 
@@ -229,14 +229,14 @@ def setup_chat(model, graph, session_id, document_names,retrieval_query):
     doc_retriever = create_document_retriever_chain(llm, retriever)
     chat_setup_time = time.time() - start_time
     logging.info(f"Chat setup completed in {chat_setup_time:.2f} seconds")
-    
+
     return llm, doc_retriever, model_name
 
 def retrieve_documents(doc_retriever, messages):
     start_time = time.time()
     docs = doc_retriever.invoke({"messages": messages})
     doc_retrieval_time = time.time() - start_time
-    logging.info(f"Documents retrieved in {doc_retrieval_time:.2f} seconds") 
+    logging.info(f"Documents retrieved in {doc_retrieval_time:.2f} seconds")
     return docs
 
 def process_documents(docs, question, messages, llm,model):
@@ -246,16 +246,16 @@ def process_documents(docs, question, messages, llm,model):
     ai_response = rag_chain.invoke({
         "messages": messages[:-1],
         "context": formatted_docs,
-        "input": question 
+        "input": question
     })
     result = get_sources_and_chunks(sources, docs)
     content = ai_response.content
     total_tokens = get_total_tokens(ai_response,llm)
 
-    
+
     predict_time = time.time() - start_time
     logging.info(f"Final Response predicted in {predict_time:.2f} seconds")
-    
+
     return content, result, total_tokens
 
 def summarize_and_log(history, messages, llm):
@@ -276,7 +276,7 @@ def create_graph_chain(model, graph):
             qa_llm=qa_llm,
             validate_cypher= True,
             graph=graph,
-            # verbose=True, 
+            # verbose=True,
             return_intermediate_steps = True,
             top_k=3
         )
@@ -285,13 +285,13 @@ def create_graph_chain(model, graph):
         return graph_chain,qa_llm,model_name
 
     except Exception as e:
-        logging.error(f"An error occurred while creating the GraphCypherQAChain instance. : {e}") 
+        logging.error(f"An error occurred while creating the GraphCypherQAChain instance. : {e}")
 
 
 def get_graph_response(graph_chain, question):
     try:
         cypher_res = graph_chain.invoke({"query": question})
-        
+
         response = cypher_res.get("result")
         cypher_query = ""
         context = []
@@ -299,7 +299,7 @@ def get_graph_response(graph_chain, question):
         for step in cypher_res.get("intermediate_steps", []):
             if "query" in step:
                 cypher_string = step["query"]
-                cypher_query = cypher_string.replace("cypher\n", "").replace("\n", " ").strip() 
+                cypher_query = cypher_string.replace("cypher\n", "").replace("\n", " ").strip()
             elif "context" in step:
                 context = step["context"]
         return {
@@ -307,7 +307,7 @@ def get_graph_response(graph_chain, question):
             "cypher_query": cypher_query,
             "context": context
         }
-    
+
     except Exception as e:
         logging.error("An error occurred while getting the graph response : {e}")
 
@@ -327,8 +327,8 @@ def QA_RAG(graph, model, question, document_names,session_id, mode):
             summarize_and_log(history, messages, qa_llm)
 
             result = {
-                "session_id": session_id, 
-                "message": graph_response["response"], 
+                "session_id": session_id,
+                "message": graph_response["response"],
                 "info": {
                     "model": model_version,
                     'cypher_query':graph_response["cypher_query"],
@@ -337,7 +337,7 @@ def QA_RAG(graph, model, question, document_names,session_id, mode):
                     "response_time": 0
                 },
                 "user": "chatbot"
-            } 
+            }
             return result
         elif mode == "vector":
             retrieval_query = VECTOR_SEARCH_QUERY
@@ -345,23 +345,23 @@ def QA_RAG(graph, model, question, document_names,session_id, mode):
             retrieval_query = VECTOR_GRAPH_SEARCH_QUERY.format(no_of_entites=VECTOR_GRAPH_SEARCH_ENTITY_LIMIT)
 
         llm, doc_retriever, model_version = setup_chat(model, graph, session_id, document_names,retrieval_query)
-        
+
         docs = retrieve_documents(doc_retriever, messages)
-        
+
         if docs:
             content, result, total_tokens = process_documents(docs, question, messages, llm,model)
         else:
             content = "I couldn't find any relevant documents to answer your question."
             result = {"sources": [], "chunkdetails": []}
             total_tokens = 0
-        
+
         ai_response = AIMessage(content=content)
         messages.append(ai_response)
         summarize_and_log(history, messages, llm)
-        
+
         return {
-            "session_id": session_id, 
-            "message": content, 
+            "session_id": session_id,
+            "message": content,
             "info": {
                 "sources": result["sources"],
                 "model": model_version,
@@ -377,7 +377,7 @@ def QA_RAG(graph, model, question, document_names,session_id, mode):
         logging.exception(f"Exception in QA component at {datetime.now()}: {str(e)}")
         error_name = type(e).__name__
         return {
-            "session_id": session_id, 
+            "session_id": session_id,
             "message": "Something went wrong",
             "info": {
                 "sources": [],

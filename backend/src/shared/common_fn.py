@@ -4,7 +4,7 @@ import logging
 from modelscope import snapshot_download
 from sentence_transformers import SentenceTransformer
 
-from backend.src.document_sources.youtube import create_youtube_url
+from src.document_sources.youtube import create_youtube_url
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_openai import OpenAIEmbeddings
@@ -84,7 +84,12 @@ def load_embedding_model(embedding_model_name: str):
         if not os.path.exists(local_dir):
             model_dir = snapshot_download(embedding_model_name, local_dir=local_dir)
         else:
-            model_dir = snapshot_download(embedding_model_name, local_files_only=True, local_dir=local_dir)
+            # 如果本地目录存在，尝试从网络更新模型（如果需要）
+            try:
+                model_dir = snapshot_download(embedding_model_name, local_dir=local_dir, local_files_only=False)
+            except ValueError as e:
+
+                model_dir = local_dir
 
         # embeddings = SentenceTransformerEmbeddings(model_name=model_dir, trust_remote_code=True)
         embeddings = SentenceTransformerEmbeddings(model_name=model_dir)

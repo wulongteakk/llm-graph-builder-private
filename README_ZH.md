@@ -176,7 +176,8 @@ GCS_FILE_CACHE = "" #save the file into GCS or local, SHould be True or False
     uvicorn score:app --reload
     ```
   - [x] 在pycharm或者vscode等ide中，运行score.py
-
+. $PROFILE.CurrentUserAllHosts
+Get-Command conda
 成功运行如下：
  <img src="./asset/images/backend.png" width="400">
 

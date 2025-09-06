@@ -51,7 +51,7 @@ def get_llm(model_version: str):
         llm = ChatOpenAI(api_key=os.environ.get('BAICHUAN_API_KEY'),
                          base_url=os.environ.get('BAICHUAN_API_URL'),
                          model=model_name,
-                         # top_p=0.7,
+                         top_p=0.7,
                          temperature=0.95)
     elif "yi-large" in MODEL_VERSIONS[model_version]:
         llm = ChatOpenAI(api_key=os.environ.get('LINGYIWANWU_API_KEY'),

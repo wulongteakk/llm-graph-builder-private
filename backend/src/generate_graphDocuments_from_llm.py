@@ -38,7 +38,7 @@ def generate_graphDocuments(model: str, graph: Neo4jGraph, chunkId_chunkDoc_list
     #     graph_documents = get_graph_from_Groq_Llama3(MODEL_VERSIONS[model], graph, chunkId_chunkDoc_list, allowedNodes, allowedRelationship)
     
     else : 
-        graph_documents = get_graph_from_llm(model,chunkId_chunkDoc_list, allowedNodes, allowedRelationship) 
+        graph_documents = get_graph_from_llm(model,chunkId_chunkDoc_list, allowedNodes, allowedRelationship)
 
     logging.info(f"graph_documents = {len(graph_documents)}")
     return graph_documents

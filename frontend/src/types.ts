@@ -405,6 +405,12 @@ export interface chatInfoMessage extends Partial<Messages> {
   mode: string;
   cypher_query?: string;
   graphonly_entities: [];
+  info?: {
+    model: string;
+    response_time: number;
+    tokens: number;
+  };
+  rag_steps?: RagSteps;
 }
 
 export interface eventResponsetypes {
@@ -571,3 +577,37 @@ export type GraphStyling = {
   node: Record<string, Partial<NodeStyling>>;
   relationship: Record<string, Partial<RelationStyling>>;
 };
+
+export interface RagStepInitialRetrieval {
+  type: string;
+  retrieved_context: string;
+  retrieved_nodes: any[]; //
+  retrieved_relationships: any[];
+};
+
+export interface JointLkEnhancement {
+  status?: string; // 使其可选，因为聊天时也会用到
+  input_graph_stats: {
+    node_count: number;
+    relation_count: number;
+  };
+  relevant_nodes: {
+    id: number;
+    name: string;
+    score: number;
+  }[];
+}
+
+export interface RagSteps {
+  initial_retrieval: RagStepInitialRetrieval;
+  jointlk_enhancement: JointLkEnhancement;
+};
+
+export interface PruneResult {
+  nodes_before: number;
+  relations_before: number;
+  nodes_after: number;
+  relations_after: number;
+  pruned_nodes_count: number;
+  threshold_used: number;
+}

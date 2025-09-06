@@ -18,7 +18,7 @@ import { tooltips } from '../../utils/Constants';
 import ChatModeToggle from '../ChatBot/ChatModeToggle';
 import { RiChatSettingsLine } from 'react-icons/ri';
 import IconButtonWithToolTip from '../UI/IconButtonToolTip';
-
+import JointLKControls from "./JointLKControls";
 const SideNav: React.FC<SideNavProps> = ({
   position,
   toggleDrawer,
