@@ -7,13 +7,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from volcenginesdkarkruntime import Ark
 
 from neo4j.graph import Node, Relationship
-4
+
 from src.llm_api_request import ChatRequest
 from src.main import *
 # from src.QA_integration import *
 from src.QA_integration_new import *
 from src.shared.common_fn import *
-from src.jointlk_integration.service_manager import jointlk_facade
+
 import uvicorn
 import asyncio
 import base64
@@ -51,38 +51,7 @@ def healthy():
 
 def sick():
     return False
-def neo4j_nodes_to_dict(node_objects: List[Node]) -> List[Dict[str, Any]]:
-    """
-    将 neo4j.graph.Node 对象列表转换为 JointLK data_transformer 所需的字典列表格式。
-    """
-    converted_nodes = []
-    if not node_objects:
-        return converted_nodes
-    for node in node_objects:
-        # neo4j Node 对象的 element_id 是唯一的，可以用作 id
-        converted_nodes.append({
-            "id": node.element_id,
-            "labels": list(node.labels),
-            "properties": dict(node)
-        })
-    return converted_nodes
 
-def neo4j_rels_to_dict(rel_objects: List[Relationship]) -> List[Dict[str, Any]]:
-    """
-    将 neo4j.graph.Relationship 对象列表转换为 JointLK data_transformer 所需的字典列表格式。
-    """
-    converted_rels = []
-    if not rel_objects:
-        return converted_rels
-    for rel in rel_objects:
-        converted_rels.append({
-            "id": rel.element_id,
-            "type": rel.type,
-            "start_node_id": rel.start_node.element_id,
-            "end_node_id": rel.end_node.element_id,
-            "properties": dict(rel)
-        })
-    return converted_rels
 
 app = FastAPI()
 
@@ -345,62 +314,11 @@ async def post_processing(uri=Form(None), userName=Form(None), password=Form(Non
 
 @app.post("/chat_bot")
 async def chat_bot(uri=Form(None), model=Form(None), userName=Form(None), password=Form(None), database=Form(None),
-                   question=Form(None), document_names=Form(None), session_id=Form(None), mode=Form(None), use_jointlk: bool = Form(False, description="Set to true to enable JointLK enhancement")):
+                   question=Form(None), document_names=Form(None), session_id=Form(None), mode=Form(None), use_jointlk: bool = Form(False)):
     logging.info(f"QA_RAG called at {datetime.now()} with use_jointlk={use_jointlk}")
     qa_rag_start_time = time.time()
     try:
-        # --- 启用 JointLK 增强模式 ---
 
-        if use_jointlk:
-            logging.info("Executing in JointLK enhancement mode.")
-
-            # 步骤 A: 检索与问题相关的子图
-            logging.info("Step A: Retrieving subgraph for the question.")
-            graph_retriever = get_graph_results(
-                uri,
-                userName,
-                password,
-                document_names
-            )
-
-            subgraph_result = graph_retriever(question, document_names=document_names)
-
-            nodes_raw = subgraph_result.get("nodes", [])
-            rels_raw = subgraph_result.get("relationships", [])
-            logging.info(f"Subgraph retrieved: {len(nodes_raw)} nodes, {len(rels_raw)} relationships.")
-
-            # 步骤 B: 调用 JointLK 服务进行推理
-            # 仅当子图不为空且 JointLK 服务可用时执行
-            if jointlk_facade and nodes_raw:
-                logging.info("Step B: Routing to JointLK enhancement service.")
-
-                # B.1: 转换数据格式
-                nodes_list = neo4j_nodes_to_dict(nodes_raw)
-                rels_list = neo4j_rels_to_dict(rels_raw)
-
-                # B.2: 调用推理流程
-                jointlk_result = jointlk_facade.process_query(question, nodes_list, rels_list)
-
-                # B.3: 格式化 JointLK 的输出以匹配前端期望
-                total_call_time = time.time() - qa_rag_start_time
-                final_result = {
-                    "answer": jointlk_result.get("answer", "No answer from JointLK."),
-                    "info": {
-                        "__typename": "jointLK_graph",
-                        "response_time": round(total_call_time, 2),
-                        "enhancement_model": "JointLK",
-                        "jointlk_metadata": jointlk_result.get("metadata")
-                    },
-                    "source_documents": []  # JointLK 流程不直接返回 source_documents
-                }
-                return create_api_response('Success', data=final_result)
-
-            else:
-                # 如果子图为空或 JointLK 服务不可用，则降级到标准 RAG 流程
-                logging.warning("Subgraph is empty or JointLK service is not available. Falling back to standard RAG.")
-                # 这里会继续执行下面的标准 RAG 流程
-
-        # --- 标准 RAG 流程 (默认或 JointLK 降级) ---
 
         if mode == "graph":
             graph = Neo4jGraph(url=uri, username=userName, password=password, database=database, sanitize=True,
@@ -408,7 +326,7 @@ async def chat_bot(uri=Form(None), model=Form(None), userName=Form(None), passwo
         else:
             graph = create_graph_database_connection(uri, userName, password, database)
         result = await asyncio.to_thread(QA_RAG, graph=graph, model=model, question=question,
-                                         document_names=document_names, session_id=session_id, mode=mode)
+                                         document_names=document_names, session_id=session_id, mode=mode, use_jointlk=use_jointlk)
 
         total_call_time = time.time() - qa_rag_start_time
         logging.info(f"Total Response time is  {total_call_time:.2f} seconds")

@@ -6,7 +6,9 @@ import logging
 from langchain_community.chat_message_histories import Neo4jChatMessageHistory
 from src.llm import get_llm
 from src.shared.common_fn import load_embedding_model
-import re
+from src.graph_query import extract_node_elements, extract_relationships,process_node
+from src.jointlk_integration.service_manager import jointlk_facade
+from typing import Annotated, Dict
 from typing import Any
 from datetime import datetime
 import time
@@ -276,7 +278,7 @@ def create_graph_chain(model, graph):
             qa_llm=qa_llm,
             validate_cypher= True,
             graph=graph,
-            # verbose=True,
+            verbose=True,
             return_intermediate_steps = True,
             top_k=3
         )
@@ -293,25 +295,37 @@ def get_graph_response(graph_chain, question):
         cypher_res = graph_chain.invoke({"query": question})
 
         response = cypher_res.get("result")
+
         cypher_query = ""
         context = []
+        #与问题相关的子图
 
+        entities = []
+        relationships = []
         for step in cypher_res.get("intermediate_steps", []):
             if "query" in step:
                 cypher_string = step["query"]
                 cypher_query = cypher_string.replace("cypher\n", "").replace("\n", " ").strip()
             elif "context" in step:
                 context = step["context"]
+            if "result" in step:
+                execution_result = step["result"]
+                records = execution_result.get("records", [])  # Neo4j返回的原始记录列表
+                # 提取与问题相关的实体和关系
+                entities = extract_node_elements(records)
+                relationships = extract_relationships(records)
         return {
             "response": response,
             "cypher_query": cypher_query,
-            "context": context
+            "context": context,
+            "entities": entities,  # 新增：实体（节点）
+            "relationships": relationships  # 新增：关系
         }
 
     except Exception as e:
         logging.error("An error occurred while getting the graph response : {e}")
 
-def QA_RAG(graph, model, question, document_names,session_id, mode):
+def QA_RAG(graph, model, question, document_names,session_id, mode,use_jointlk):
     try:
         logging.info(f"Chat Mode : {mode}")
         history = create_neo4j_chat_message_history(graph, session_id)
@@ -322,9 +336,29 @@ def QA_RAG(graph, model, question, document_names,session_id, mode):
         if mode == "graph":
             graph_chain, qa_llm,model_version = create_graph_chain(model,graph)
             graph_response = get_graph_response(graph_chain,question)
-            ai_response = AIMessage(content=graph_response["response"]) if graph_response["response"] else AIMessage(content="Something went wrong")
+            nodes_raw=graph_response["entities"]
+            rels_raw=graph_response["relationships"]
+            logging.info(f"Subgraph retrieved: {len(nodes_raw)} nodes, {len(rels_raw)} relationships.")
+            if use_jointlk:
+                # 仅当子图不为空且 JointLK 服务可用时执行
+                if jointlk_facade and nodes_raw:
+                    logging.info("Step B: Routing to JointLK enhancement service.")
+
+                #  调用推理流程
+
+                    jointlk_result = jointlk_facade.process_query(question, nodes_raw, rels_raw)
+                # 格式化 JointLK 的输出以匹配前端期望
+                    ai_response = AIMessage(content=jointlk_result.get("answer")) if jointlk_result and jointlk_result.get("answer") else AIMessage(content="No answer from JointLK.")
+
+
+            else:
+                ai_response = AIMessage(content=graph_response["response"]) if graph_response[
+                    "response"] else AIMessage(content="Something went wrong")
+
             messages.append(ai_response)
             summarize_and_log(history, messages, qa_llm)
+
+
 
             result = {
                 "session_id": session_id,

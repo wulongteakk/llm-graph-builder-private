@@ -5,198 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="777b174b-b2bb-43b5-8c24-c358f70f920d" name="更改" comment="新增jointlk">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/llm-graph-builder.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/concept.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet-assertions-5.6.0.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.pruned.graph" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.unpruned.graph" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/matcher_patterns.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/cpnet/tzw.ent.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/dev_rand_split.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/dev.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/dev.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/test.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/test.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/train.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/graph/train.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/grounded/dev.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/grounded/test.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/grounded/train.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/inhouse_split_qids.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/statement/dev.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/statement/test.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/statement/train.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/test_rand_split_no_answers.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/csqa/train_rand_split.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ddb.graph" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ddb_names.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ddb_relas.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ddb_to_umls_cui.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ent_emb.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/ptrs.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/ddb/vocab.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/dev.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/dev.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/test.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/test.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/train.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/graph/train.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/grounded/dev.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/grounded/test.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/grounded/train.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/dev.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/dev.statement.umls_linked.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/test.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/test.statement.umls_linked.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/train.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/medqa_usmle/statement/train.statement.umls_linked.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Additional/crowdsourced-facts.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Additional/dev_complete.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Additional/test_complete.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Additional/train_complete.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/dev.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/dev.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/openbook.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/test.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/test.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/train.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/OpenBookQA-V1-Sep2018/Data/Main/train.tsv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/dev.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/dev.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/test.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/test.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/train.graph.adj.pk" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/graph/train.graph.adj.pk.loaded_cache" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/grounded/dev.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/grounded/test.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/grounded/train.grounded.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/dev-fact.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/dev.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/test-fact.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/test.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/train-fact.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/data/obqa/statement/train.statement.jsonl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/saved_models/csqa/csqa.model.pt.dev_77.6-test_75.3" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/saved_models/csqa/csqa.model.pt.dev_78.4-test_74.2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/saved_models/medqa_usmle/medqa_usmle.model.pt.dev_38.0-test_39.8" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/saved_models/obqa/obqa-fact.model.pt.dev_79.2-test_85.6" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JointLK/saved_models/obqa/obqa.model.pt.dev_68.8-test_70.4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/src/jointlk_integration/debug_init.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/.msc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/.mv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/configuration.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/pytorch_model.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/resources/dual-encoder.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/special_tokens_map.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/tokenizer.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/embedding/tokenizer_config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Include/site/python3.11/greenlet/greenlet.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/Activate.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/activate" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/activate.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/backend-test-tools.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/chardetect.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/check-model.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/check-node.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/coloredlogs.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/convert-caffe2-to-onnx.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/convert-onnx-to-caffe2.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/datasets-cli.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/deactivate.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/deep.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/distro.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/dotenv.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/dumppdf.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/email_validator.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/f2py.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/fastapi.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/filetype.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/flumina.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/fonttools.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/get_gprof" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/get_objgraph" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/google-oauthlib-tool.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/gunicorn.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/httpx.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/huggingface-cli.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/humanfriendly.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/isympy.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/jp.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/jsondiff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/jsonpatch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/jsonpointer" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/jsonschema.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/langchain-server.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/langsmith.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/markdown-it.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/markdown_py.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/modelscope.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/nltk.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/normalizer.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/onnxruntime_test.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/openai.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/oxmsg.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pdf2txt.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pdfplumber.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pip.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pip3.11.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pip3.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyftmerge.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyftsubset.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pygmentize.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pygrun" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pymupdf.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pypdfium2.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-decrypt.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-encrypt.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-keygen.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-priv2pub.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-sign.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pyrsa-verify.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pytesseract.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/python.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pythonw.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pytube.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pywin32_postinstall.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pywin32_postinstall.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pywin32_testall.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/pywin32_testall.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/runxlrd.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/tabulate.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/tb-gcp-uploader.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/torchrun.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/tqdm.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/transformers-cli.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/ttx.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/typer.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/undill" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/unstructured-ingest.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/uvicorn.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/vba_extract.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/watchfiles.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/websockets.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/wheel.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/yapf-diff.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/yapf.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/Scripts/youtube_transcript_api.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/pyvenv.cfg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/share/man/man1/isympy.1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/llm-graph-builder/share/man/man1/ttx.1" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JointLK/modeling/modeling_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/JointLK/modeling/modeling_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JointLK/modeling/modeling_jointlk.py" beforeDir="false" afterPath="$PROJECT_DIR$/JointLK/modeling/modeling_jointlk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/JointLK/utils/layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/JointLK/utils/layers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK" beforeDir="false" afterPath="$PROJECT_DIR$/JointLK" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet-assertions-5.6.0.csv.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.csv.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.pruned.graph.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/conceptnet.en.unpruned.graph.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/matcher_patterns.json.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/cpnet/tzw.ent.npy.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/csqa/graph/dev.graph.adj.pk.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/csqa/graph/dev.graph.adj.pk.loaded_cache.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/csqa/graph/test.graph.adj.pk.baiduyun.uploading.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/JointLK/data/csqa/graph/test.graph.adj.pk.loaded_cache.baiduyun.uploading.cfg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/score.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/score.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/QA_integration_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/QA_integration_new.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/src/jointlk_integration/inference_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/jointlk_integration/inference_service.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/src/jointlk_integration/service_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/jointlk_integration/service_manager.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -211,7 +34,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/JointLK" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -234,6 +57,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "D:/NEO4J_related/llm-builder/llm/llm-graph-builder",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -244,7 +68,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Python.debug_init">
+  <component name="RunManager" selected="Python.score">
     <configuration name="debug_init" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="llm-graph-builder" />
       <option name="ENV_FILES" value="" />
@@ -289,7 +113,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="score" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="score" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="llm-graph-builder" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -298,8 +122,9 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="llm-graph-builder" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/backend" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
@@ -337,7 +162,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.debug_init" />
-        <item itemvalue="Python.score" />
         <item itemvalue="Python.modeling_jointlk" />
         <item itemvalue="Python.test_integrationqa" />
       </list>

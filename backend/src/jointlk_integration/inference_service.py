@@ -64,7 +64,7 @@ class JointLKInferenceService:
             # 实例化模型
             self.model = JointLK_Model(config=config, num_relation=config.num_relation)
 
-            # 加载预训练权重 (如果提供了 checkpoint)
+            # 加载预训练权重
             if os.path.exists(self.model_checkpoint_path):
                 logging.info(f"Loading weights from checkpoint: {self.model_checkpoint_path}")
                 self.model.load_state_dict(torch.load(self.model_checkpoint_path, map_location=self.device))
