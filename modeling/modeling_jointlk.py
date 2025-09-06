@@ -1,9 +1,17 @@
-from modeling.modeling_encoder import TextEncoder, MODEL_NAME_TO_CLASS
-from utils.data_utils import *
-from utils.layers import *
+# 临时测试：检查是否能导入 modeling_encoder
+try:
+    from modeling.modeling_encoder import TextEncoder, MODEL_NAME_TO_CLASS
+    print("成功导入 modeling_encoder")
+except ImportError as e:
+    print(f"导入失败：{e}")
+    # 打印当前文件路径，确认目录结构
+    import os
+    print(f"当前文件路径：{os.path.abspath(__file__)}")
+from ..utils.data_utils import *
+from ..utils.layers import *
 import torch.nn.functional as F
 
-from utils.sag_pool import SAGPooling
+from ..utils.sag_pool import SAGPooling
 from torch_geometric.nn import GCNConv, GATConv
 from torch_geometric.nn import global_mean_pool as gap, global_max_pool as gmp
 

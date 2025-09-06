@@ -2,7 +2,8 @@ from typing import Union, Optional, Callable
 
 import torch
 from torch_geometric.nn import GraphConv
-from torch_geometric.nn.pool.topk_pool import topk, filter_adj
+from torch_geometric.nn.pool.select import topk
+from torch_geometric.nn.pool.connect.filter_edges import filter_adj
 from torch_geometric.utils import softmax
 
 

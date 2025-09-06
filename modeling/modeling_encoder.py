@@ -2,27 +2,30 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-from transformers import (OPENAI_GPT_PRETRAINED_CONFIG_ARCHIVE_MAP, BERT_PRETRAINED_CONFIG_ARCHIVE_MAP,
-                          XLNET_PRETRAINED_CONFIG_ARCHIVE_MAP, ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP)
+
+
 try:
     from transformers import ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP
-except:
+except ImportError:
     pass
 from transformers import AutoModel, BertModel, BertConfig
 from utils.layers import *
 from utils.data_utils import get_gpt_token_num
 
 MODEL_CLASS_TO_NAME = {
-    'gpt': list(OPENAI_GPT_PRETRAINED_CONFIG_ARCHIVE_MAP.keys()),
-    'bert': list(BERT_PRETRAINED_CONFIG_ARCHIVE_MAP.keys()),
-    'xlnet': list(XLNET_PRETRAINED_CONFIG_ARCHIVE_MAP.keys()),
-    'roberta': list(ROBERTA_PRETRAINED_CONFIG_ARCHIVE_MAP.keys()),
+    'bert': ['bert-base-uncased', 'bert-large-uncased', 'bert-base-cased', 'bert-large-cased',
+             'bert-base-multilingual-uncased', 'bert-base-multilingual-cased'],
+    'xlnet': ['xlnet-base-cased', 'xlnet-large-cased'],
+    'roberta': ['roberta-base', 'roberta-large', 'roberta-base-openai-detector', 'roberta-large-openai-detector'],
     'lstm': ['lstm'],
+    'gpt2':[ 'gpt2-small', 'gpt2-medium', 'gpt2-large', 'gpt2-xl'],
 }
 try:
     MODEL_CLASS_TO_NAME['albert'] =  list(ALBERT_PRETRAINED_CONFIG_ARCHIVE_MAP.keys())
 except:
     pass
+
+
 
 MODEL_NAME_TO_CLASS = {model_name: model_class for model_class, model_name_list in MODEL_CLASS_TO_NAME.items() for model_name in model_name_list}
 
